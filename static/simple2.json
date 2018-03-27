@@ -1,0 +1,103 @@
+{
+  "duration": 1,
+  "timeStep": 0.25,
+  "objects": [
+    {
+      "name": "cubeA",
+      "mesh": "cube",
+      "static": true,
+      "translation": [-1, 0, 0]
+    },
+    {
+      "name": "cubeB",
+      "mesh": "cube",
+      "material": {
+        "color": [1.000, 0.766, 0.336, 1.0]
+      },
+      "static": true,
+      "translation": [1, 0, 0]
+    },
+    {
+      "name": "cube1",
+      "mesh": "cube",
+      "material": {
+        "color": [1.000, 0.766, 0.336, 1.0]
+      },
+      "static": true,
+      "translation": [-10, 0, 0],
+      "rotation": [0.578, -0.403, -0.390, 0.593],
+      "scale": [1, 2, 3]
+    },
+    {
+      "name": "sphere1",
+      "mesh": "sphere"
+    },
+    {
+      "name": "cube2",
+      "mesh": "cube"
+    },
+    {
+      "name": "sphere2",
+      "mesh": "sphere",
+      "material": {
+        "color": [1.000, 0.766, 0.335, 1.0]
+      },
+      "static": true,
+      "translation": [0, 3, 0]
+    },
+    {
+      "name": "sphere3",
+      "mesh": "sphere",
+      "material": {
+        "roughness": 0.3,
+        "metallic": 0.9
+      },
+      "static": true,
+      "translation": [3, 0, 0],
+      "rotation": [0.578, -0.403, -0.390, 0.593],
+      "scale": [1, 2, 3]
+    }
+  ],
+  "frames": [
+    {
+      "sphere1": {
+        "t": [0, 0, 0]
+      },
+      "cube2": {
+        "s": [0, 0, 0]
+      }
+    },
+    {
+      "sphere1": {
+        "t": [1, 0, 0]
+      },
+      "cube2": {
+        "s": [1, 1, 1]
+      }
+    },
+    {
+      "sphere1": {
+        "t": [1, 0, 1]
+      },
+      "cube2": {
+        "s": [0, 0, 0]
+      }
+    },
+    {
+      "sphere1": {
+        "t": [0, 0, 1]
+      },
+      "cube2": {
+        "s": [1, 1, 1]
+      }
+    },
+    {
+      "sphere1": {
+        "t": [0, 0, 0]
+      },
+      "cube2": {
+        "s": [0, 0, 0]
+      }
+    }
+  ]
+}
