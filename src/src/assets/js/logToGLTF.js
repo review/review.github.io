@@ -22,21 +22,21 @@ const DEFAULT_ROUGHNESS = 0.5;
 const BYTES_IN_FLOAT = 4;
 
 
-function arrayEqual(a, b) {
-  if (a === b) return true;
-  if (a == null || b == null) return false;
-  if (a.length !== b.length) return false;
-  // TODO: arbitrary threshold
-  return a.every((e, i) => Math.abs(e - b[i]) < 0.01);
-}
+// function arrayEqual(a, b) {
+//   if (a === b) return true;
+//   if (a == null || b == null) return false;
+//   if (a.length !== b.length) return false;
+//   // TODO: arbitrary threshold
+//   return a.every((e, i) => Math.abs(e - b[i]) < 0.01);
+// }
 
 
-function materialEqual(a, b) {
-  if (a === b) return true;
-  return arrayEqual(a.color, b.color)
-    && a.metallic === b.metallic
-    && a.roughness === b.roughness;
-}
+// function materialEqual(a, b) {
+//   if (a === b) return true;
+//   return arrayEqual(a.color, b.color)
+//     && a.metallic === b.metallic
+//     && a.roughness === b.roughness;
+// }
 
 
 function linspace(a, b, count) {

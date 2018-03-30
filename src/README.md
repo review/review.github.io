@@ -29,6 +29,8 @@ npm run dev
 
 # build for production with minification
 npm run build
+mv dist/index.html ..
+mv dist/static ..
 
 # build for production and view the bundle analyzer report
 npm run build --report

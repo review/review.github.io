@@ -26,8 +26,8 @@
         multiple
       />
       <span v-show="!isLoading && !isError">
-        <label class="box__label" for="fileInput"><strong>Choose files,</strong></label>
-        <span>drop files, or paste a URL.</span>
+        <label class="box__label" for="fileInput"><strong>Choose file(s)</strong></label>
+        <span>or drop file(s) here.</span>
       </span>
 
     </div>

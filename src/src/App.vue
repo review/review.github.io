@@ -264,10 +264,10 @@ export default {
       // eslint-disable-next-line
       // console.log(Treeselect);
 
-      this.selections = [];
-      this.objectNames.push({ id: 'new', label: 'New' });
-      this.optionsReady = false;
-      this.$nextTick(() => { this.optionsReady = true; });
+      // this.selections = [];
+      // this.objectNames.push({ id: 'new', label: 'New' });
+      // this.optionsReady = false;
+      // this.$nextTick(() => { this.optionsReady = true; });
     },
     showSettings() {
       this.$nextTick(() => {
@@ -297,6 +297,17 @@ export default {
       this.visualizer.enable();
       this.togglePlayPause();
     },
+    loadLogFromURL(urlRef) {
+      fetch(urlRef).then(res => res.json()).then(async (data) => {
+        this.dataReady([data]);
+        // .then(() => {
+          // updateControls();
+        // });
+      }).catch((error) => {
+        // eslint-disable-next-line
+        console.log('An error occurred while fetching the log file:' + error);
+      });
+    },
   },
   filters: {
     formatTime(t) {
@@ -309,6 +320,19 @@ export default {
   mounted() {
     this.visualizer = new Visualizer('canvas-container', 'stats-container',
       this.timeCB, this.loopCB);
+
+    // Search URL parameters as source of data
+    const searchParams = new URLSearchParams(window.location.search);
+
+    if (searchParams.has('log')) {
+      const urlPath = searchParams.get('log');
+      if (urlPath.includes('http')) {
+        this.loadLogFromURL(urlPath);
+      } else {
+        // eslint-disable-next-line
+        console.log('Invalid log url.');
+      }
+    }
   },
   components: {
     colorpicker: ColorPicker,
