@@ -31,7 +31,7 @@
     },
     {
       "name": "cylinder3",
-      "mesh": "cube",
+      "mesh": "cylinder",
       "scale": [
         0.1,
         0.5,
@@ -40,7 +40,7 @@
     },
     {
       "name": "cylinder4",
-      "mesh": "cube",
+      "mesh": "cylinder",
       "scale": [
         0.1,
         0.5,
@@ -49,7 +49,7 @@
     },
     {
       "name": "cylinder5",
-      "mesh": "cube",
+      "mesh": "cylinder",
       "scale": [
         0.1,
         0.5,
@@ -58,7 +58,7 @@
     },
     {
       "name": "cylinder6",
-      "mesh": "cube",
+      "mesh": "cylinder",
       "scale": [
         0.1,
         0.5,
@@ -67,7 +67,7 @@
     },
     {
       "name": "cylinder7",
-      "mesh": "cube",
+      "mesh": "cylinder",
       "scale": [
         0.05,
         0.75,
@@ -76,7 +76,7 @@
     },
     {
       "name": "cylinder8",
-      "mesh": "cube",
+      "mesh": "cylinder",
       "scale": [
         0.05,
         0.75,
@@ -85,7 +85,7 @@
     },
     {
       "name": "cylinder9",
-      "mesh": "cube",
+      "mesh": "cylinder",
       "scale": [
         0.05,
         0.75,
@@ -94,7 +94,7 @@
     },
     {
       "name": "cylinder10",
-      "mesh": "cube",
+      "mesh": "cylinder",
       "scale": [
         0.05,
         0.75,
@@ -103,7 +103,7 @@
     },
     {
       "name": "cylinder11",
-      "mesh": "cube",
+      "mesh": "cylinder",
       "scale": [
         0.1,
         0.25,
@@ -112,7 +112,7 @@
     },
     {
       "name": "cylinder12",
-      "mesh": "cube",
+      "mesh": "cylinder",
       "scale": [
         0.1,
         0.25,
@@ -121,7 +121,7 @@
     },
     {
       "name": "cylinder13",
-      "mesh": "cube",
+      "mesh": "cylinder",
       "scale": [
         0.1,
         0.25,
@@ -130,7 +130,7 @@
     },
     {
       "name": "cylinder14",
-      "mesh": "cube",
+      "mesh": "cylinder",
       "scale": [
         0.1,
         0.25,
