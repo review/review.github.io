@@ -7,12 +7,12 @@ https://review.github.io/?log=https://raw.githubusercontent.com/review/review.gi
 
 
 
-## Review Format Schema
+## Review Log-File Schema
 
 ```json
 {
     "$schema": "http://json-schema.org/draft-07/schema#",
-    "title": "Review Format",
+    "title": "Review Log-File",
     "description": "A visualization of meshes evolving through time.",
     "type": "object",
     "properties": {
