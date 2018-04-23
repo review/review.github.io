@@ -19,6 +19,18 @@
 
       <div class="settings z2">
 
+        <div class="settings-item">
+          <div class="settings-button-group">
+            <input
+              class="settings-button"
+              type="button"
+              name="export-gltf"
+              id="export-gltf"
+              @click="exportGLTF()">
+            <label for="export-gltf" class="settings-label">Export glTF</label>
+          </div>
+        </div>
+
         <h5>Global Settings</h5>
 
         <div class="settings-item">
@@ -69,7 +81,8 @@
 
         <div class="settings-item">
           <div class="toggle-switch-group">
-            <input type="checkbox" name="followToggle" id="followToggle">
+            <input type="checkbox" name="followToggle" id="followToggle" v-model="followingObject"
+              @click="setFollow()">
             <label for="followToggle" class="toggle-slider"></label>
             <label for="followToggle" class="settings-label">Follow Model</label>
           </div>
@@ -77,9 +90,10 @@
 
         <div class="settings-item">
           <div class="toggle-switch-group">
-            <input type="checkbox" name="visibility" id="visibility">
+            <input type="checkbox" name="visibility" id="visibility" v-model="showingObjects"
+              @click="toggleVisibility()">>
             <label for="visibility" class="toggle-slider"></label>
-            <label for="visibility" class="settings-label">Show Model</label>
+            <label for="visibility" class="settings-label">Show Model(s)</label>
           </div>
         </div>
 
@@ -179,6 +193,7 @@ export default {
       loopPlayback: true,
       autoPlay: false,
       currentColor: '#18453B',
+      followingObject: false,
 
       // State
       isPlaying: false,
@@ -197,11 +212,24 @@ export default {
     };
   },
   methods: {
+    toggleVisibility() {
+      this.visualizer.toggleVisibility(this.selections);
+    },
+    exportGLTF() {
+      this.visualizer.exportGLTF();
+    },
     setLoopMode() {
       this.visualizer.setLoop(!this.loopPlayback);
     },
     resetCamera() {
       this.visualizer.resetCamera();
+    },
+    setFollow() {
+      if (!this.followingObject) {
+        this.visualizer.follow(this.selections[0]);
+      } else {
+        this.visualizer.unfollow();
+      }
     },
     startTimeSlide() {
       this.timeIsSliding = true;

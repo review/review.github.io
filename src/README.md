@@ -7,6 +7,11 @@ Current Tabs:
 Tasks:
 - debounce color picker (lodash)
 - watch time and update visualizer
+- full screen mode
+- clean up side panel (should not close when interacting with controls)
+  + https://spaces.archilogic.com/explore
+  + https://pissang.github.io/clay-viewer/editor/
+- export button (change to icon)
 
 Logger tasks:
 - add id to use in place of name for lookup in frames

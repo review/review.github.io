@@ -30,6 +30,7 @@ import {
 
 import 'three/examples/js/controls/OrbitControls';
 import 'three/examples/js/loaders/GLTFLoader';
+import 'three/examples/js/exporters/GLTFExporter';
 import { Stats } from './stats';
 /* global THREE */
 
@@ -97,6 +98,19 @@ function disposeNode(parentObject) {
 }
 
 
+function save(blob, filename = 'scene.gltf') {
+  // https://github.com/mrdoob/three.js/blob/master/examples/misc_exporter_gltf.html
+
+  const link = document.createElement('a');
+  link.style.display = 'none';
+  document.body.appendChild(link); // Firefox workaround, see #6594
+
+  link.href = URL.createObjectURL(blob);
+  link.download = filename;
+  link.click();
+}
+
+
 class Visualizer {
 
   constructor(containerID, statsID, timeCB, loopCB) {
@@ -109,6 +123,11 @@ class Visualizer {
 
     // Visualization state
     this.isShutdown = true;
+    this.isFollowing = false;
+    this.followObject = null;
+
+
+    this.gltfData = null;
 
 
     // TODO: pass in the actual element instead?
@@ -173,6 +192,7 @@ class Visualizer {
 
 
     this.loader = new THREE.GLTFLoader();
+    this.exporter = new THREE.GLTFExporter();
 
 
     this.clock = new Clock();
@@ -202,6 +222,9 @@ class Visualizer {
 
     const converter = new LogToGLTF();
     const gltf = converter.convert(log);
+
+    // TODO does this need to be saved?
+    this.gltfData = gltf;
 
     this.loader.parse(
       // glTF data in JSON format
@@ -282,6 +305,20 @@ class Visualizer {
 
   resetCamera() {
     this.controls.reset();
+  }
+
+
+  follow(objIdx) {
+    this.controls.enabled = false;
+    this.isFollowing = true;
+    this.followObject = this.scene.getObjectByName(this.objNames[objIdx || 0]);
+  }
+
+
+  unfollow() {
+    this.controls.enabled = true;
+    this.isFollowing = false;
+    this.followObject = null;
   }
 
 
@@ -367,7 +404,13 @@ class Visualizer {
           this.timeCB(this.actions[0].time);
         }
 
-        if (this.mixer) this.mixer.update(this.clock.getDelta());
+        if (this.mixer) {
+          this.mixer.update(this.clock.getDelta());
+        }
+
+        if (this.isFollowing) {
+          this.camera.lookAt(this.followObject.position);
+        }
 
         this.renderer.render(this.scene, this.camera);
 
@@ -376,6 +419,16 @@ class Visualizer {
     };
 
     loop();
+  }
+
+
+  exportGLTF() {
+    console.log(this.scene.getObjectByName(this.objNames[0]));
+    this.exporter.parse(this.scene, (result) => {
+      const text = JSON.stringify(result, null, 2);
+      save(new Blob([text], { type: 'text/plain' }));
+    });
+    // save(new Blob([JSON.stringify(this.gltfData, null, 2)]));
   }
 }
 
