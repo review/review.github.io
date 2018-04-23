@@ -88,14 +88,27 @@
           </div>
         </div>
 
-        <div class="settings-item">
+<!--         <div class="settings-item">
           <div class="toggle-switch-group">
-            <input type="checkbox" name="visibility" id="visibility" v-model="showingObjects"
-              @click="toggleVisibility()">>
+            <input type="checkbox" name="visibility" id="visibility"
+              @click="toggleVisibility()">
             <label for="visibility" class="toggle-slider"></label>
             <label for="visibility" class="settings-label">Show Model(s)</label>
           </div>
         </div>
+ -->
+        <div class="settings-item">
+          <div class="settings-button-group">
+            <input
+              class="settings-button"
+              type="button"
+              name="toggle-visibility"
+              id="toggle-visibility"
+              @click="toggleVisibility()">
+            <label for="toggle-visibility" class="settings-label">Toggle Visibility</label>
+          </div>
+        </div>
+
 
         <div id="stats-container"></div>
 
@@ -213,7 +226,7 @@ export default {
   },
   methods: {
     toggleVisibility() {
-      this.visualizer.toggleVisibility(this.selections);
+      this.visualizer.toggleObjectVisibility(this.selections);
     },
     exportGLTF() {
       this.visualizer.exportGLTF();

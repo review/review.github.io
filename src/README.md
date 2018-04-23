@@ -5,6 +5,7 @@ Current Tabs:
 - https://gomakethings.com/how-to-update-a-url-without-reloading-the-page-using-vanilla-javascript/
 
 Tasks:
+- had to add  "|| material.isShadowMaterial" to gltf export (line 762)
 - debounce color picker (lodash)
 - watch time and update visualizer
 - full screen mode

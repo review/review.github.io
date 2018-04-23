@@ -363,6 +363,13 @@ class Visualizer {
     });
   }
 
+  toggleObjectVisibility(objIdxs) {
+    objIdxs.forEach((objI) => {
+      const obj = this.scene.getObjectByName(this.objNames[objI]);
+      if (obj) obj.visible = !obj.visible;
+    });
+  }
+
   reset() {
     this.isShutdown = true;
 
@@ -423,12 +430,12 @@ class Visualizer {
 
 
   exportGLTF() {
-    console.log(this.scene.getObjectByName(this.objNames[0]));
-    this.exporter.parse(this.scene, (result) => {
-      const text = JSON.stringify(result, null, 2);
-      save(new Blob([text], { type: 'text/plain' }));
-    });
-    // save(new Blob([JSON.stringify(this.gltfData, null, 2)]));
+    // console.log(this.scene.getObjectByName(this.objNames[0]));
+    // this.exporter.parse(this.scene, (result) => {
+    //   const text = JSON.stringify(result, null, 2);
+    //   save(new Blob([text], { type: 'text/plain' }));
+    // });
+    save(new Blob([JSON.stringify(this.gltfData, null, 2)]));
   }
 }
 
