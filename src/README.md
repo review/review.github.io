@@ -12,6 +12,8 @@ Tasks:
 - clean up side panel (should not close when interacting with controls)
   + https://spaces.archilogic.com/explore
   + https://pissang.github.io/clay-viewer/editor/
+    * https://sweetalert.js.org/guides/
+    * https://github.com/automat/controlkit.js
 - export button (change to icon)
 
 Logger tasks:
