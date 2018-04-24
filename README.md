@@ -3,7 +3,7 @@
 
 Example of using review:
 
-https://review.github.io/?log=https://raw.githubusercontent.com/review/review.github.io/master/static/simple1.json
+https://review.github.io/?log=https://raw.githubusercontent.com/review/review.github.io/master/examples/simple-sphere.json
 
 
 
