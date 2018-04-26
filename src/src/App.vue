@@ -10,6 +10,8 @@
     @drop.prevent.stop
     >
 
+    <fullscreen id="appfs" ref="fullscreen" :fullscreen.sync="fullscreen">
+
     <div class="grid-maximize z0" :class="{ 'hide-no-animation': !animationAvailable }">
       <!-- <canvas style="width:100%;height:100%;" ref="canvas"></canvas> -->
       <div id="canvas-container" ref="canvas-container"></div>
@@ -137,6 +139,13 @@
         </div>
       </div>
 
+      <div class="ui-one-from-right z1">
+        <div class="ui-button" @click="toggleFullscreen">
+          <i v-if="fullscreen" class="material-icons">fullscreen_exit</i>
+          <i v-else="fullscreen" class="material-icons">fullscreen</i>
+        </div>
+      </div>
+
       <div class="ui-bottom z1" :disabled="!animationAvailable">
         <div class="player">
 
@@ -168,7 +177,7 @@
       </div>
 
     </div>
-
+    </fullscreen>
   </div>
 </template>
 
@@ -187,7 +196,9 @@
 /* eslint no-unused-expressions: ["error", { "allowShortCircuit": true, "allowTernary": true }] */
 
 
+import Fullscreen from 'vue-fullscreen/src/component';
 import Treeselect from '@riophae/vue-treeselect';
+
 import ColorPicker from './components/ColorPicker';
 import Dropzone from './components/Dropzone';
 import Visualizer from './assets/js/visualizer';
@@ -217,6 +228,7 @@ export default {
       // Display settings
       displaySettings: false,
       displayDropzone: true,
+      fullscreen: false,
 
       // Select input settings
       selections: [],
@@ -301,6 +313,17 @@ export default {
       this.displayDropzone = true;
       this.visualizer.reset();
     },
+    toggleFullscreen() {
+      this.$refs.fullscreen.toggle();
+      this.fullscreen = !this.fullscreen;
+    //   if (!document.fullscreenElement) {
+    //     document.getElementById('app').requestFullscreen();
+    //   } else {
+    //     if (document.exitFullscreen) {
+    //       document.exitFullscreen();
+    //     }
+    //   }
+    },
     onPaste() {
       // eslint-disable-next-line
       // console.log(Treeselect);
@@ -379,6 +402,7 @@ export default {
     colorpicker: ColorPicker,
     treeselect: Treeselect,
     dropzone: Dropzone,
+    fullscreen: Fullscreen,
   },
   watch: {
     time(newTime) {
@@ -410,7 +434,7 @@ $settingsWidth: 260px;
 $borderRadius: 4px;
 $cornerSize: 50px;
 
-#app {
+#appfs {
   font-family: 'Roboto';
   width: 100vw;
   height: 100vh;
@@ -543,6 +567,11 @@ $cornerSize: 50px;
 
   & .ui-top-right {
     grid-row: top;
+    grid-column: right;
+  }
+
+  & .ui-one-from-right {
+    grid-row: 2 / 3;
     grid-column: right;
   }
 

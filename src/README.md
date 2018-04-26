@@ -15,6 +15,7 @@ Tasks:
     * https://sweetalert.js.org/guides/
     * https://github.com/automat/controlkit.js
 - export button (change to icon)
+- shared material
 
 Logger tasks:
 - add id to use in place of name for lookup in frames
