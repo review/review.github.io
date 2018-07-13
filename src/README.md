@@ -57,3 +57,9 @@ Modifications to webpack template
   + https://webpack.js.org/guides/shimming/#shimming-globals
   + https://gist.github.com/cecilemuller/0be98dcbb0c7efff64762919ca486a59
 - Added postcss plugins to `.postcssrc.js`
+
+```
+npm run build
+git rm -r ../static
+mv dist/static ..
+git add ../static
