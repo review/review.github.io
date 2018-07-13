@@ -65,6 +65,13 @@ function float32ArrayToBase64(a) {
 }
 
 
+// Round to nearest multiple
+function roundToMultiple(value, multiple) {
+  const t = 1.0 / multiple;
+  return Math.round(value * t) / t;
+}
+
+
 class LogToGLTF {
 
   constructor() {
@@ -284,8 +291,9 @@ class LogToGLTF {
   // (e.g., rotation or translation) change over time.
   createAnimations() {
     // Setup time data
-    const timeEnd = this.logObject.duration;
-    const timeSteps = Math.round(timeEnd / this.logObject.timeStep) + 1;
+    const timeStep = this.logObject.timeStep;
+    const timeSteps = this.logObject.frames.length;
+    const timeEnd = roundToMultiple((timeSteps - 1) * timeStep, timeStep);
     const timeData = new Float32Array(linspace(0, timeEnd, timeSteps));
     const timeByteLength = timeData.length * BYTES_IN_FLOAT;
     const timeURI = float32ArrayToBase64(timeData);

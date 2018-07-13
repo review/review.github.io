@@ -1,6 +1,6 @@
 {
+  "name": "Worm Hop",
   "timeStep": 0.02,
-  "duration": 10.0,
   "objects": [
     {
       "name": "cube0",

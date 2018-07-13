@@ -1,4 +1,5 @@
 {
+  "name": "Quadruped Hop",
   "frames": [
     {
       "cylinder3": {
@@ -108548,7 +108549,6 @@
       }
     }
   ],
-  "duration": 10.0,
   "objects": [
     {
       "material": {

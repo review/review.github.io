@@ -1,5 +1,5 @@
 {
-  "duration": 1.25,
+  "name": "Sphere Example",
   "timeStep": 0.25,
   "objects": [{
       "name": "sphere1", "mesh": "sphere"

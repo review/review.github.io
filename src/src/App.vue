@@ -284,7 +284,7 @@ export default {
       this.displayDropzone = false;
       this.isPlaying = false;
       this.playbackSpeed = 1;
-      this.timeEnd = jsonData.duration;
+      this.timeEnd = (jsonData.frames.length - 1) * jsonData.timeStep;
       this.time = 0;
       this.hideSettings();
 

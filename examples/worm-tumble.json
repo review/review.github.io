@@ -1,6 +1,7 @@
 {
-  "timeStep": 0.02,
   "duration": 10.0,
+  "name": "Worm Tumble",
+  "timeStep": 0.02,
   "objects": [
     {
       "name": "cube0",

@@ -16,6 +16,8 @@ Tasks:
     * https://github.com/automat/controlkit.js
 - export button (change to icon)
 - shared material
+- arrow keys and other keyboard input
+- have camera move when object is far enough away
 
 Logger tasks:
 - add id to use in place of name for lookup in frames
