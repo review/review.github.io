@@ -5,4 +5,6 @@
 elm make src/Main.elm --optimize --output=elm.js
 ~~~
 
-Move to Parcel (Parcel 2)?
+~~~bash
+parcel index.html
+~~~

@@ -186,9 +186,13 @@ playbackButtonText playback =
 
 update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
+    let
+        playStatus =
+            togglePlayback model.playback
+    in
     case msg of
         TogglePlayback ->
-            ( { model | playback = togglePlayback model.playback }, portIsPaused <| Encode.bool (model.playback == Paused) )
+            ( { model | playback = playStatus }, portIsPaused <| Encode.bool (playStatus == Paused) )
 
         Restart ->
             ( { model | time = 0 }, Cmd.none )
