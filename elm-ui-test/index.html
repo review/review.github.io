@@ -4,17 +4,29 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Three JS with Elm UI</title>
+  <title>Review</title>
   <!-- <link rel="stylesheet" href="whatever-you-want.css"> -->
   <script type="text/javascript" src="https://unpkg.com/three@0.115.0/build/three.js"></script>
   <script type="text/javascript" src="https://unpkg.com/three@0.115.0/examples/js/loaders/GLTFLoader.js"></script>
   <script type="text/javascript" src="https://unpkg.com/three@0.115.0/examples/js/controls/OrbitControls.js"></script>
+
+  <style>
+    @keyframes spin {
+      0% {
+        transform: rotateZ(0);
+      }
+
+      100% {
+        transform: rotateZ(360deg);
+      }
+    }
+  </style>
 </head>
 
 <body>
   <main id="container">
     <div id="elm"></div>
-    <div id="canvas-container"></div>
+    <div id="canvas-container" style="width: 100vw; height: 100vh;"></div>
   </main>
   <script src="./src/index.js"></script>
 </body>

@@ -1,10 +1,10 @@
-// /**
-//  *
-//  * Visualize mechanic simulations.
-//  *
-//  * @author Anthony Clark
-//  *
-//  */
+/**
+ *
+ * Visualize mechanic simulations.
+ *
+ * @author Anthony Clark
+ *
+ */
 
 
 // TODO: teardown visualization after new log is loaded
@@ -33,7 +33,6 @@ let THREE = window.THREE;
 // import 'three/examples/js/controls/OrbitControls';
 // import 'three/examples/js/loaders/GLTFLoader';
 // import 'three/examples/js/exporters/GLTFExporter';
-// import { Stats } from './stats';
 
 import { LogToGLTF } from './logToGLTF';
 
@@ -50,70 +49,70 @@ function onWindowResize(vis) {
 }
 
 
-// function disposeHierarchy(node, callback) {
-//   for (let i = node.children.length - 1; i >= 0; i -= 1) {
-//     const child = node.children[i];
-//     disposeHierarchy(child, callback);
-//     callback(child);
-//   }
-// }
+function disposeHierarchy(node, callback) {
+  for (let i = node.children.length - 1; i >= 0; i -= 1) {
+    const child = node.children[i];
+    disposeHierarchy(child, callback);
+    callback(child);
+  }
+}
 
 
-// function disposeNode(parentObject) {
-//   parentObject.traverse((node) => {
-//     if (node instanceof THREE.Mesh) {
-//       if (node.geometry) {
-//         node.geometry.dispose();
-//       }
-//       if (node.material) {
-//         let materialArray;
-//         if (node.material instanceof THREE.MeshFaceMaterial
-//           || node.material instanceof THREE.MultiMaterial) {
-//           materialArray = node.material.materials;
-//         } else if (node.material instanceof Array) {
-//           materialArray = node.material;
-//         }
-//         if (materialArray) {
-//           materialArray.forEach((mtrl) => {
-//             if (mtrl.map) mtrl.map.dispose();
-//             if (mtrl.lightMap) mtrl.lightMap.dispose();
-//             if (mtrl.bumpMap) mtrl.bumpMap.dispose();
-//             if (mtrl.normalMap) mtrl.normalMap.dispose();
-//             if (mtrl.specularMap) mtrl.specularMap.dispose();
-//             if (mtrl.envMap) mtrl.envMap.dispose();
-//             mtrl.dispose();
-//           });
-//         } else {
-//           if (node.material.map) node.material.map.dispose();
-//           if (node.material.lightMap) node.material.lightMap.dispose();
-//           if (node.material.bumpMap) node.material.bumpMap.dispose();
-//           if (node.material.normalMap) node.material.normalMap.dispose();
-//           if (node.material.specularMap) node.material.specularMap.dispose();
-//           if (node.material.envMap) node.material.envMap.dispose();
-//           node.material.dispose();
-//         }
-//       }
-//     }
-//   });
-// }
+function disposeNode(parentObject) {
+  parentObject.traverse((node) => {
+    if (node instanceof THREE.Mesh) {
+      if (node.geometry) {
+        node.geometry.dispose();
+      }
+      if (node.material) {
+        let materialArray;
+        if (node.material instanceof THREE.MeshFaceMaterial
+          || node.material instanceof THREE.MultiMaterial) {
+          materialArray = node.material.materials;
+        } else if (node.material instanceof Array) {
+          materialArray = node.material;
+        }
+        if (materialArray) {
+          materialArray.forEach((mtrl) => {
+            if (mtrl.map) mtrl.map.dispose();
+            if (mtrl.lightMap) mtrl.lightMap.dispose();
+            if (mtrl.bumpMap) mtrl.bumpMap.dispose();
+            if (mtrl.normalMap) mtrl.normalMap.dispose();
+            if (mtrl.specularMap) mtrl.specularMap.dispose();
+            if (mtrl.envMap) mtrl.envMap.dispose();
+            mtrl.dispose();
+          });
+        } else {
+          if (node.material.map) node.material.map.dispose();
+          if (node.material.lightMap) node.material.lightMap.dispose();
+          if (node.material.bumpMap) node.material.bumpMap.dispose();
+          if (node.material.normalMap) node.material.normalMap.dispose();
+          if (node.material.specularMap) node.material.specularMap.dispose();
+          if (node.material.envMap) node.material.envMap.dispose();
+          node.material.dispose();
+        }
+      }
+    }
+  });
+}
 
 
-// function save(blob, filename = 'scene.gltf') {
-//   // https://github.com/mrdoob/three.js/blob/master/examples/misc_exporter_gltf.html
+function save(blob, filename = 'scene.gltf') {
+  // https://github.com/mrdoob/three.js/blob/master/examples/misc_exporter_gltf.html
 
-//   const link = document.createElement('a');
-//   link.style.display = 'none';
-//   document.body.appendChild(link); // Firefox workaround, see #6594
+  const link = document.createElement('a');
+  link.style.display = 'none';
+  document.body.appendChild(link); // Firefox workaround, see #6594
 
-//   link.href = URL.createObjectURL(blob);
-//   link.download = filename;
-//   link.click();
-// }
+  link.href = URL.createObjectURL(blob);
+  link.download = filename;
+  link.click();
+}
 
 
 export class Visualizer {
 
-  constructor(containerID, statsID, timeCB, loopCB) {
+  constructor(containerID, timeCB, readyCB, endCB) {
     // TODO: detect stuff
     // if (!Detector.webgl) {
     //   const warning = Detector.getWebGLErrorMessage();
@@ -121,7 +120,7 @@ export class Visualizer {
     // }
 
     // Visualization state
-    this.isShutdown = true;
+    this.reset();
     this.isFollowing = false;
     this.followObject = null;
 
@@ -131,7 +130,6 @@ export class Visualizer {
 
     // TODO: pass in the actual element instead?
     const container = document.getElementById(containerID);
-    // const statsContainer = document.getElementById(statsID);
 
     // TODO: should these be passed in?
     const width = window.innerWidth;
@@ -197,18 +195,14 @@ export class Visualizer {
     this.clock = new THREE.Clock();
 
 
-    // this.stats = new Stats();
-    // this.stats.dom.style.cssText = 'position:relative;top:0;left:0;cursor:pointer;opacity:0.9;z-index:10000';
-    // statsContainer.appendChild(this.stats.dom);
-
-
     this.mixer = null;
     this.clips = [];
     this.actions = [];
 
 
     this.timeCB = timeCB;
-    this.loopCB = loopCB;
+    this.readyCB = readyCB;
+    this.endCB = endCB;
 
 
     window.addEventListener('resize', onWindowResize(this), false);
@@ -221,6 +215,7 @@ export class Visualizer {
 
     const converter = new LogToGLTF();
     const gltf = converter.convert(log);
+    const timeEnd = converter.getTimeEnd();
 
     // TODO does this need to be saved?
     this.gltfData = gltf;
@@ -245,6 +240,14 @@ export class Visualizer {
         this.loadedScene = data.scene;
         this.scene.add(data.scene);
 
+        const objectColors = new Map();
+        this.scene.traverseVisible(function (node) {
+          if (node instanceof THREE.Mesh) {
+            objectColors.set(node.name, node.material.color.clone());
+          }
+        });
+        this.objectColors = objectColors;
+
         this.mixer = new THREE.AnimationMixer(data.scene);
         this.clips = data.animations;
         this.actions = this.clips.map(clip => this.mixer.clipAction(clip));
@@ -252,6 +255,7 @@ export class Visualizer {
         this.actions.forEach((action) => {
           action.play();
           action.paused = true;
+          action.setLoop(THREE.LoopOnce, Infinity);
           // action.enabled = true;
           // action.clampWhenFinished = ...;
           // action.isRunning(); <-- read-only
@@ -270,8 +274,10 @@ export class Visualizer {
         });
 
         this.mixer.addEventListener('finished', () => {
-          this.loopCB();
+          this.endCB();
         });
+
+        this.readyCB(timeEnd);
 
         // data.animations; // Array<THREE.AnimationClip>
         // data.scene;      // THREE.Scene
@@ -314,17 +320,22 @@ export class Visualizer {
   }
 
 
-  unfollow() {
+  unFollow() {
     this.controls.enabled = true;
     this.isFollowing = false;
     this.followObject = null;
   }
 
 
-  setLoop(loop) {
-    const mode = loop ? THREE.LoopRepeat : THREE.LoopOnce;
+  loop() {
     this.actions.forEach((action) => {
-      action.setLoop(mode, Infinity);
+      action.setLoop(THREE.LoopRepeat, Infinity);
+    });
+  }
+
+  noLoop() {
+    this.actions.forEach((action) => {
+      action.setLoop(THREE.LoopOnce, Infinity);
     });
   }
 
@@ -355,17 +366,34 @@ export class Visualizer {
   }
 
 
-  setObjectColor(objIdxs, color) {
-    objIdxs.forEach((objI) => {
-      const obj = this.scene.getObjectByName(this.objNames[objI]);
-      if (obj) obj.material.color.set(color);
+  // setObjectColor(objIdxs, color) {
+  //   objIdxs.forEach((objI) => {
+  //     const obj = this.scene.getObjectByName(this.objNames[objI]);
+  //     if (obj) obj.material.color.set(color);
+  //   });
+  // }
+
+  // toggleObjectVisibility(objIdxs) {
+  //   objIdxs.forEach((objI) => {
+  //     const obj = this.scene.getObjectByName(this.objNames[objI]);
+  //     if (obj) obj.visible = !obj.visible;
+  //   });
+  // }
+
+  noColor() {
+    this.scene.traverseVisible(function (node) {
+      if (node.isMesh && node.name !== "") {
+        node.material.color.set('#FFFFFF');
+      }
     });
   }
 
-  toggleObjectVisibility(objIdxs) {
-    objIdxs.forEach((objI) => {
-      const obj = this.scene.getObjectByName(this.objNames[objI]);
-      if (obj) obj.visible = !obj.visible;
+  color() {
+    const objectColors = this.objectColors;
+    this.scene.traverseVisible(function (node) {
+      if (node.isMesh && node.name !== "") {
+        node.material.color.set(objectColors.get(node.name));
+      }
     });
   }
 
@@ -376,19 +404,19 @@ export class Visualizer {
     if (this.loadedScene) {
       disposeHierarchy(this.loadedScene, disposeNode);
       this.scene.remove(this.loadedScene);
+
+
+      this.actions.forEach((action) => {
+        this.mixer.uncacheAction(action);
+      });
+
+
+      this.clips.forEach((clip) => {
+        this.mixer.uncacheClip(clip);
+      });
+
+      // mixer.uncacheRoot(root);
     }
-
-
-    this.actions.forEach((action) => {
-      this.mixer.uncacheAction(action);
-    });
-
-
-    this.clips.forEach((clip) => {
-      this.mixer.uncacheClip(clip);
-    });
-
-    // mixer.uncacheRoot(root);
 
     this.objNames = [];
     this.actions = [];
@@ -404,8 +432,6 @@ export class Visualizer {
       if (!this.isShutdown) {
         requestAnimationFrame(loop);
 
-        // this.stats.begin();
-
         if (this.actions.length > 0 && this.actions[0].isRunning()) {
           this.timeCB(this.actions[0].time);
         }
@@ -419,8 +445,6 @@ export class Visualizer {
         }
 
         this.renderer.render(this.scene, this.camera);
-
-        // this.stats.end();
       }
     };
 
@@ -429,11 +453,11 @@ export class Visualizer {
 
 
   exportGLTF() {
-    // console.log(this.scene.getObjectByName(this.objNames[0]));
-    // this.exporter.parse(this.scene, (result) => {
-    //   const text = JSON.stringify(result, null, 2);
-    //   save(new Blob([text], { type: 'text/plain' }));
-    // });
+    console.log(this.scene.getObjectByName(this.objNames[0]));
+    this.exporter.parse(this.scene, (result) => {
+      const text = JSON.stringify(result, null, 2);
+      save(new Blob([text], { type: 'text/plain' }));
+    });
     save(new Blob([JSON.stringify(this.gltfData, null, 2)]));
   }
 }

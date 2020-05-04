@@ -133,6 +133,11 @@ export class LogToGLTF {
   }
 
 
+  getTimeEnd() {
+    return this.timeEnd;
+  }
+
+
   // The scene is the entry point for the description of the scene that
   // is stored in the glTF. It refers to the nodes that define the
   // scene graph.
@@ -292,15 +297,15 @@ export class LogToGLTF {
     // Setup time data
     const timeStep = this.logObject.timeStep;
     const timeSteps = this.logObject.frames.length;
-    const timeEnd = roundToMultiple((timeSteps - 1) * timeStep, timeStep);
-    const timeData = new Float32Array(linspace(0, timeEnd, timeSteps));
+    this.timeEnd = roundToMultiple((timeSteps - 1) * timeStep, timeStep);
+    const timeData = new Float32Array(linspace(0, this.timeEnd, timeSteps));
     const timeByteLength = timeData.length * BYTES_IN_FLOAT;
     const timeURI = float32ArrayToBase64(timeData);
 
     const timeBufferI = this.addBase64Buffer('time', timeByteLength, timeURI);
     const timeViewI = this.addView('time', timeBufferI, 0, timeByteLength);
     const timeAccessorI = this.addAccessor('time', timeViewI, timeData.length,
-      'SCALAR', [0], [timeEnd]);
+      'SCALAR', [0], [this.timeEnd]);
 
     // Setup TRS data for each animated node
     const animProps = [];
