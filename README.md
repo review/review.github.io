@@ -2,17 +2,17 @@
 
 Example of using review:
 
-https://review.github.io/?log=https://raw.githubusercontent.com/review/review.github.io/master/examples/simple-sphere.json
+https://review.github.io/?log=gh:review/review.github.io/master/examples/simple-sphere.json
 
 Link to all examples found in the examples directory:
 
-- [multiple-shapes](https://review.github.io/?log=https://raw.githubusercontent.com/review/review.github.io/master/examples/multiple-shapes.json)
-- [quadruped-gallop](https://review.github.io/?log=https://raw.githubusercontent.com/review/review.github.io/master/examples/quadruped-gallop.json)
-- [quadruped-hop](https://review.github.io/?log=https://raw.githubusercontent.com/review/review.github.io/master/examples/quadruped-hop.json)
-- [simple-sphere](https://review.github.io/?log=https://raw.githubusercontent.com/review/review.github.io/master/examples/simple-sphere.json)
-- [worm-hop](https://review.github.io/?log=https://raw.githubusercontent.com/review/review.github.io/master/examples/worm-hop.json)
-- [worm-tumble](https://review.github.io/?log=https://raw.githubusercontent.com/review/review.github.io/master/examples/worm-tumble.json)
-- [autonomous-vehicle](https://review.github.io/?log=https://raw.githubusercontent.com/anthonyjclark/adabot02-ann/master/animations/fsm-40-2-best20.json)
+- [multiple-shapes](https://review.github.io/?log=gh:review/review.github.io/master/examples/multiple-shapes.json)
+- [quadruped-gallop](https://review.github.io/?log=gh:review/review.github.io/master/examples/quadruped-gallop.json)
+- [quadruped-hop](https://review.github.io/?log=gh:review/review.github.io/master/examples/quadruped-hop.json)
+- [simple-sphere](https://review.github.io/?log=gh:review/review.github.io/master/examples/simple-sphere.json)
+- [worm-hop](https://review.github.io/?log=gh:review/review.github.io/master/examples/worm-hop.json)
+- [worm-tumble](https://review.github.io/?log=gh:review/review.github.io/master/examples/worm-tumble.json)
+- [autonomous-vehicle](https://review.github.io/?log=gh:anthonyjclark/adabot02-ann/master/animations/fsm-40-2-best20.json)
 
 
 ## Review Log-File Schema
