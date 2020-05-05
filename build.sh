@@ -1,5 +1,9 @@
 #!/usr/bin/env bash
 
-rm -rf dist *.js *.map *.html
+rm -r dist
+git rm *.js *.map
 parcel build index.html
-cp dist/* .
+mv dist/* .
+git add *.js *.map
+git commit -am "New build and add."
+git push -u origin master

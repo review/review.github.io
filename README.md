@@ -84,7 +84,6 @@ git push -u origin master
 
 - cleanup
   - https://threejs.org/docs/#manual/en/introduction/Import-via-modules
-  - change example urls
 - visualizer features
   - light vs dark view
   - handle material depth https://stackoverflow.com/questions/15994944/transparent-objects-in-threejs
