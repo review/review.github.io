@@ -123,7 +123,7 @@ handleKey model str =
 
 logPrefix : String
 logPrefix =
-    "?log=https://raw.githubusercontent.com/review/review.github.io/master/examples/"
+    "?log=gh:review/review.github.io/master/examples/"
 
 
 filePrefix : String
@@ -380,16 +380,6 @@ init urlQuery =
 
                 Valid processedUrl ->
                     ( "", getFile processedUrl, Loading )
-
-        -- urlPresent =
-        --     not (String.isEmpty urlQuery)
-        -- errorMsg =
-        --     if urlPresent && not (String.endsWith ".json" urlQuery) then
-        --         "URL 'log' parameter does not point to a JSON file."
-        --     else
-        --         ""
-        -- shouldGet =
-        --     urlPresent && String.isEmpty errorMsg
     in
     ( { status = status
       , error = error

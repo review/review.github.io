@@ -71,9 +71,11 @@ Link to all examples found in the examples directory:
 parcel index.html
 
 # Building for production
-rm -rf dist *.js *.map *.html
+rm -r dist 
+git rm *.js *.map
 parcel build index.html
-cp dist/* .
+mv dist/* .
+git add *.js *.map
 ~~~
 
 ## Tasks
