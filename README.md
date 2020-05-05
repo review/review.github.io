@@ -97,3 +97,4 @@ cp dist/* .
 - multiple files?
 - [tools](https://github.com/KhronosGroup/glTF/blob/master/README.md)
   - convert to binary
+- use name from log file
