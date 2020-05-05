@@ -39,10 +39,6 @@ ternary bool one two =
 
 getFile : String -> Cmd Msg
 getFile url =
-    let
-        tmp =
-            Debug.log "url: " url
-    in
     Http.get
         { url = url
         , expect = Http.expectString HttpGotFile
@@ -303,8 +299,9 @@ type alias Model =
 init : String -> ( Model, Cmd Msg )
 init urlQuery =
     let
+        -- TODO: check for valid url (and gh: version)
         urlPresent =
-            Debug.log "check if url is valid here" not (String.isEmpty urlQuery)
+            not (String.isEmpty urlQuery)
 
         errorMsg =
             if urlPresent && not (String.endsWith ".json" urlQuery) then

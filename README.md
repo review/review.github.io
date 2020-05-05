@@ -1,4 +1,3 @@
-
 # Review
 
 Example of using review:
@@ -57,7 +56,6 @@ Link to all examples found in the examples directory:
             "type": "array",
             "items": {
                 "type": "object",
-                "patternProperties"
             },
             "minItems": 1
         }
@@ -66,27 +64,34 @@ Link to all examples found in the examples directory:
 }
 ```
 
+## Development
+
+~~~bash
+# Development
+parcel index.html
+
+# Building for production
+parcel build index.html
+~~~
+
+## Tasks
 
 
-
-
-
-
-
-keyboard controls
-- play/pause: space bar
-- skip ahead/back: arrow keys
-- increase/decrease speed: arrow keys
-
-
-
-Add key checking and error messages
-Spent a lot of time confused because I had “timestep” instead of “timeStep”
-- This is allows the video to be played but with a time length of NaN and no frames seems to be played (at least no movement of objects)
-Document the different types of frames.
-- I see “t”, “s”, and “r” which I am assuming to be translation, shrink or scale, and rotate but I do not see these defined anywhere and I am just guessing based off of examples.
-In examples, objects can be defined to be static, but this is not documented at all. Should mention the reasoning why someone would want to specify this or not.
-Document about defining color and scaling the objects when defining them.
-
-
-Export to sketchfab (now supports glTF)
+- https://threejs.org/docs/#manual/en/introduction/Import-via-modules
+- issue with dropping file
+- destructuring in let blocks
+- z-Monster.gltf as example for meshes and binary
+- structure button and slider inputs
+- profile both version
+- validate urls
+- keyboard controls
+  - play/pause: space bar
+  - skip ahead/back: arrow keys
+  - increase/decrease speed: arrow keys
+- improve schema
+  - frames (object names, t/r/s, require presence of non-static items)
+  - objects (scale, material (color, roughness, metallic), static, translation, rotation)
+- update GLTF abilities
+- multiple files?
+- [tools](https://github.com/KhronosGroup/glTF/blob/master/README.md)
+  - convert to binary
