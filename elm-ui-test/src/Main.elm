@@ -333,8 +333,7 @@ init urlQuery =
             , { description = "Galloping Quadruped", filename = "quadruped-gallop.json" }
             , { description = "Hopping Quadruped", filename = "quadruped-hop.json" }
             , { description = "Hopping Worm", filename = "worm-hop.json" }
-
-            -- , ( "Autonomous Vehicle", "https://raw.githubusercontent.com/anthonyjclark/adabot02-ann/master/animations/fsm-40-2-best20.json" )
+            , { description = "Autonomous Vehicle", filename = "autonomous-vehicle.json" }
             ]
       }
     , ternary shouldGet (getFile urlQuery) (ui2VisCommand <| Encode.string "reset")
