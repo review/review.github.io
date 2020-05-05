@@ -1,15 +1,4 @@
 -- https://1602.github.io/elm-feather-icons/
--- play (playing)
--- pause (paused)
--- repeat (loop playback)
--- filePlus (link, open file, drop zone)
--- trash2 (delete current)
--- loader (while loading)
--- crosshair (follow)
--- video (reset camera)
--- eye (toggle colors)
--- download (download gltf)
--- github (to github)
 
 
 module Icons exposing

@@ -53,10 +53,12 @@ getFile url =
 --  ██████  ██████  ██   ████ ███████    ██    ██   ██ ██   ████    ██    ███████
 
 
+logPrefix : String
 logPrefix =
     "?log=https://raw.githubusercontent.com/review/review.github.io/master/examples/"
 
 
+filePrefix : String
 filePrefix =
     "https://github.com/review/review.github.io/tree/master/examples/"
 

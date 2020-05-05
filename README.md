@@ -98,3 +98,9 @@ cp dist/* .
 - [tools](https://github.com/KhronosGroup/glTF/blob/master/README.md)
   - convert to binary
 - use name from log file
+- material.isShadowMaterial
+- shared material
+- have camera move when object is far enough away
+- add id to use in place of name for lookup in frames
+- handle material depth https://stackoverflow.com/questions/15994944/transparent-objects-in-threejs
+- single face materials (cutaway like down a hallway)
