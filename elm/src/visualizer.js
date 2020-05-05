@@ -128,10 +128,7 @@ export class Visualizer {
     this.gltfData = null;
 
 
-    // TODO: pass in the actual element instead?
     const container = document.getElementById(containerID);
-
-    // TODO: should these be passed in?
     const width = window.innerWidth;
     const height = window.innerHeight;
 
@@ -181,6 +178,7 @@ export class Visualizer {
 
 
     this.controls = new THREE.OrbitControls(this.camera, this.renderer.domElement);
+    this.controls.enableKeys = false;
     // this.controls.target.set(...DEFALUT_CAMERA_LOOKAT);
 
 
@@ -215,6 +213,7 @@ export class Visualizer {
     const converter = new LogToGLTF();
     const gltf = converter.convert(log);
     const timeEnd = converter.getTimeEnd();
+    const name = converter.getName();
 
     this.objNames = log.objects.map(obj => obj.name);
 
@@ -278,7 +277,7 @@ export class Visualizer {
           this.endCB();
         });
 
-        this.readyCB(timeEnd);
+        this.readyCB(timeEnd, name);
 
         // data.animations; // Array<THREE.AnimationClip>
         // data.scene;      // THREE.Scene
@@ -318,13 +317,18 @@ export class Visualizer {
     this.controls.enabled = false;
     this.isFollowing = true;
     this.followObject = this.scene.getObjectByName(this.objNames[objIdx || 0]);
+    this.cameraRelativePosition = new THREE.Vector3();
+    this.cameraRelativePosition.subVectors(this.followObject.position, this.camera.position);
+    this.controls.target = this.followObject.position;
   }
 
 
   unFollow() {
-    this.controls.enabled = true;
-    this.isFollowing = false;
+    this.controls.target = this.followObject.position.clone();
+    this.cameraRelativePosition = null;
     this.followObject = null;
+    this.isFollowing = false;
+    this.controls.enabled = true;
   }
 
 
@@ -442,7 +446,9 @@ export class Visualizer {
         }
 
         if (this.isFollowing) {
-          this.camera.lookAt(this.followObject.position);
+          // this.camera.lookAt(objPos);
+          this.camera.position.subVectors(this.followObject.position, this.cameraRelativePosition);
+          this.controls.update();
         }
 
         this.renderer.render(this.scene, this.camera);

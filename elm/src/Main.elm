@@ -1,6 +1,7 @@
 port module Main exposing (main)
 
 import Browser
+import Browser.Events
 import Element as E
 import Element.Background as Background
 import Element.Border as Border
@@ -18,6 +19,7 @@ import Json.Decode as Decode
 import Json.Encode as Encode
 import Round
 import Task
+import Url.Builder
 
 
 
@@ -37,12 +39,78 @@ ternary bool one two =
         two
 
 
+type DataUrl
+    = Valid String
+    | Invalid String
+    | NoUrl
+
+
+processUrl : String -> DataUrl
+processUrl url =
+    if String.isEmpty url then
+        NoUrl
+
+    else if String.startsWith "gh:" url then
+        let
+            ghurl =
+                String.dropLeft 3 url
+
+            ghparts =
+                String.split "/" ghurl
+        in
+        if List.length ghparts >= 4 then
+            Valid <| Url.Builder.crossOrigin "https://raw.githubusercontent.com" ghparts []
+
+        else
+            Invalid "Invalid gh query, try 'gh:username/repo/branch/filepath'."
+
+    else
+        Valid url
+
+
 getFile : String -> Cmd Msg
 getFile url =
     Http.get
         { url = url
         , expect = Http.expectString HttpGotFile
         }
+
+
+timeJump : Float -> Float
+timeJump duration =
+    duration / 10
+
+
+speedLimit : Float
+speedLimit =
+    5
+
+
+keyDecoder : Model -> Decode.Decoder Msg
+keyDecoder model =
+    Decode.map (handleKey model) (Decode.field "key" Decode.string)
+
+
+handleKey : Model -> String -> Msg
+handleKey model str =
+    case str of
+        " " ->
+            TogglePlayback
+
+        "ArrowRight" ->
+            ChangeTime (min model.timeEnd (model.time + timeJump model.timeEnd))
+
+        "ArrowLeft" ->
+            ChangeTime (max 0 (model.time - timeJump model.timeEnd))
+
+        "ArrowUp" ->
+            ChangeSpeed (min speedLimit (model.speed + 1))
+
+        "ArrowDown" ->
+            ChangeSpeed (max -speedLimit (model.speed - 1))
+
+        _ ->
+            NoOp
 
 
 
@@ -186,12 +254,12 @@ type Msg
     | FilePick
     | FileDragEnter
     | FileDragLeave
-    | ReceivedFile File
+    | ReceivedFiles File (List File)
     | FileLoaded String
     | VisualizationLoaded Float
     | VisualizationTime Float
     | VisualizationCommand String
-    | VisualizationError String
+    | HandleError String
 
 
 
@@ -203,12 +271,13 @@ type Msg
 
 
 subscriptions : Model -> Sub Msg
-subscriptions _ =
+subscriptions model =
     Sub.batch
         [ vis2UiLoaded VisualizationLoaded
         , vis2UiTime VisualizationTime
         , vis2UiCommand VisualizationCommand
-        , vis2UiError VisualizationError
+        , vis2UiError HandleError
+        , Browser.Events.onKeyDown (keyDecoder model)
         ]
 
 
@@ -301,22 +370,29 @@ type alias Model =
 init : String -> ( Model, Cmd Msg )
 init urlQuery =
     let
-        -- TODO: check for valid url (and gh: version)
-        urlPresent =
-            not (String.isEmpty urlQuery)
+        ( error, cmd, status ) =
+            case processUrl urlQuery of
+                NoUrl ->
+                    ( "", ui2VisCommand <| Encode.string "reset", Splash )
 
-        errorMsg =
-            if urlPresent && not (String.endsWith ".json" urlQuery) then
-                "URL 'log' parameter does not point to a JSON file."
+                Invalid err ->
+                    ( err, Cmd.none, Splash )
 
-            else
-                ""
+                Valid processedUrl ->
+                    ( "", getFile processedUrl, Loading )
 
-        shouldGet =
-            urlPresent && String.isEmpty errorMsg
+        -- urlPresent =
+        --     not (String.isEmpty urlQuery)
+        -- errorMsg =
+        --     if urlPresent && not (String.endsWith ".json" urlQuery) then
+        --         "URL 'log' parameter does not point to a JSON file."
+        --     else
+        --         ""
+        -- shouldGet =
+        --     urlPresent && String.isEmpty errorMsg
     in
-    ( { status = ternary shouldGet Loading Splash
-      , error = errorMsg
+    ( { status = status
+      , error = error
       , scrubbing = False
       , wasPaused = True
       , playing = False
@@ -338,7 +414,7 @@ init urlQuery =
             , { description = "Autonomous Vehicle", filename = "autonomous-vehicle.json" }
             ]
       }
-    , ternary shouldGet (getFile urlQuery) (ui2VisCommand <| Encode.string "reset")
+    , cmd
     )
 
 
@@ -488,7 +564,7 @@ override msg =
 
 handleFileDrop : Decode.Decoder Msg
 handleFileDrop =
-    Decode.at [ "dataTransfer", "files" ] (Decode.map ReceivedFile File.decoder)
+    Decode.at [ "dataTransfer", "files" ] (Decode.oneOrMore ReceivedFiles File.decoder)
 
 
 view : Model -> Html Msg
@@ -529,10 +605,10 @@ view model =
         speedLabel =
             Input.labelRight [] (button (text ("x " ++ Round.round 2 model.speed)) playerReady (ChangeSpeed 1) "Set speed to x1.")
 
-        speedLimit =
+        spdBound =
             case model.status of
                 Ready ->
-                    5
+                    speedLimit
 
                 _ ->
                     0
@@ -563,7 +639,7 @@ view model =
                 , slider scrubberLabel 0 model.timeEnd model.time Nothing (\new -> ChangeTime new) StartScrubbing EndScrubbing
                 , button (text (Round.round 2 model.timeEnd)) playerReady (ChangeTime model.timeEnd) "Set time to end."
                 , button (icon Icons.repeat) (btnStatus model.looping) ToggleLooping "Loop playback."
-                , slider speedLabel -speedLimit speedLimit model.speed (Just 0.2) (\new -> ChangeSpeed new) NoOp NoOp
+                , slider speedLabel -spdBound spdBound model.speed (Just 0.2) (\new -> ChangeSpeed new) NoOp NoOp
                 , button (icon Icons.crosshair) (btnStatus model.following) ToggleFollowing "Follow model."
                 , button (icon Icons.video) cameraBtnStatus CameraReset "Reset camera."
                 , button (icon Icons.eye) (btnStatus <| not model.colorful) ToggleColorful "Enable/Disable colors."
@@ -679,19 +755,12 @@ view model =
 
 update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
-    let
-        loopingToggled =
-            ternary model.looping "noLoop" "loop"
-
-        followingToggled =
-            ternary model.following "unFollow" "follow"
-
-        colorfulToggled =
-            ternary model.colorful "noColor" "color"
-    in
     case msg of
         NoOp ->
             ( model, Cmd.none )
+
+        HandleError err ->
+            ( { model | status = Splash, error = err }, Cmd.none )
 
         Kill ->
             init ""
@@ -737,19 +806,19 @@ update msg model =
             ( { model | time = time }, ui2VisTime <| Encode.float time )
 
         ToggleLooping ->
-            ( { model | looping = not model.looping }, ui2VisCommand <| Encode.string loopingToggled )
+            ( { model | looping = not model.looping }, ui2VisCommand <| Encode.string (ternary model.looping "noLoop" "loop") )
 
         ChangeSpeed speed ->
             ( { model | speed = speed }, ui2VisSpeed <| Encode.float speed )
 
         ToggleFollowing ->
-            ( { model | following = not model.following }, ui2VisCommand <| Encode.string followingToggled )
+            ( { model | following = not model.following }, ui2VisCommand <| Encode.string (ternary model.following "unFollow" "follow") )
 
         CameraReset ->
             ( model, ui2VisCommand <| Encode.string "resetCamera" )
 
         ToggleColorful ->
-            ( { model | colorful = not model.colorful }, ui2VisCommand <| Encode.string colorfulToggled )
+            ( { model | colorful = not model.colorful }, ui2VisCommand <| Encode.string (ternary model.colorful "noColor" "color") )
 
         Download ->
             ( model, ui2VisCommand <| Encode.string "downloadGltf" )
@@ -758,18 +827,30 @@ update msg model =
             ( { model | urlText = txt }, Cmd.none )
 
         UrlEnterKeyPress ->
-            ( { model | status = Loading }, getFile model.urlText )
+            let
+                ( error, cmd, status ) =
+                    case processUrl model.urlText of
+                        NoUrl ->
+                            ( "", ui2VisCommand <| Encode.string "reset", Splash )
+
+                        Invalid err ->
+                            ( err, Cmd.none, Splash )
+
+                        Valid processedUrl ->
+                            ( "", getFile processedUrl, Loading )
+            in
+            ( { model | status = status, error = error }, cmd )
 
         HttpGotFile result ->
             case result of
                 Ok str ->
-                    ( { model | error = "Got the file?" }, ui2VisData <| Encode.string str )
+                    ( model, ui2VisData <| Encode.string str )
 
                 Err _ ->
                     ( { model | error = "Could not get file from url.", status = Splash }, Cmd.none )
 
         FilePick ->
-            ( model, Select.file [ "application/json" ] ReceivedFile )
+            ( model, Select.files [ "application/json" ] ReceivedFiles )
 
         FileDragEnter ->
             ( { model | fileHover = True }, Cmd.none )
@@ -777,8 +858,12 @@ update msg model =
         FileDragLeave ->
             ( { model | fileHover = False }, Cmd.none )
 
-        ReceivedFile file ->
-            ( { model | fileHover = False, status = Loading }, Task.perform FileLoaded (File.toString file) )
+        ReceivedFiles file files ->
+            if List.length files == 0 then
+                ( { model | fileHover = False, status = Loading }, Task.perform FileLoaded (File.toString file) )
+
+            else
+                ( { model | fileHover = False, error = "Uploading multiple files is not supported at this time." }, Cmd.none )
 
         FileLoaded str ->
             ( model, ui2VisData <| Encode.string str )
@@ -795,6 +880,3 @@ update msg model =
 
             else
                 ( model, Cmd.none )
-
-        VisualizationError err ->
-            ( { model | status = Splash, error = err }, Cmd.none )

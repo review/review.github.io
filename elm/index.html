@@ -13,6 +13,15 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/ajv/6.12.2/ajv.min.js"
     integrity="sha256-ZVmP98znALIm9fVvLIXTKpm7rfAhP85+Rp3r4DtkfYY=" crossorigin="anonymous"></script>
   <style>
+    html {
+      overflow: hidden;
+    }
+
+    #canvas-container {
+      width: 100vw;
+      height: 100vh;
+    }
+
     @keyframes spin {
       0% {
         transform: rotateZ(0);
@@ -28,7 +37,7 @@
 <body>
   <main id="container">
     <div id="elm"></div>
-    <div id="canvas-container" style="width: 100vw; height: 100vh;"></div>
+    <div id="canvas-container"></div>
   </main>
   <script src="./src/index.js"></script>
 </body>

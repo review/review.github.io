@@ -78,29 +78,22 @@ cp dist/* .
 
 ## Tasks
 
-
-- https://threejs.org/docs/#manual/en/introduction/Import-via-modules
-- issue with dropping file
-- destructuring in let blocks
-- z-Monster.gltf as example for meshes and binary
-- structure button and slider inputs
-- profile both version
-- validate urls
-- keyboard controls
-  - play/pause: space bar
-  - skip ahead/back: arrow keys
-  - increase/decrease speed: arrow keys
-- improve schema
-  - frames (object names, t/r/s, require presence of non-static items)
-  - objects (scale, material (color, roughness, metallic), static, translation, rotation)
-- update GLTF abilities
-- multiple files?
+- cleanup
+  - https://threejs.org/docs/#manual/en/introduction/Import-via-modules
+  - change example urls
+- visualizer features
+  - light vs dark view
+  - handle material depth https://stackoverflow.com/questions/15994944/transparent-objects-in-threejs
+  - single face materials (cutaway like down a hallway)
+  - material.isShadowMaterial
+  - shared material
+- capabilities
+  - z-Monster.gltf as example for meshes and binary
+    - handle multiple files
+  - update GLTF abilities
 - [tools](https://github.com/KhronosGroup/glTF/blob/master/README.md)
   - convert to binary
-- use name from log file
-- material.isShadowMaterial
-- shared material
-- have camera move when object is far enough away
-- add id to use in place of name for lookup in frames
-- handle material depth https://stackoverflow.com/questions/15994944/transparent-objects-in-threejs
-- single face materials (cutaway like down a hallway)
+  - improve schema
+    - frames (object names, t/r/s, require presence of non-static items)
+    - objects (scale, material (color, roughness, metallic), static, translation, rotation)
+  - add id to use in place of name for lookup in frames

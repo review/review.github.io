@@ -188,6 +188,11 @@ export class LogToGLTF {
   }
 
 
+  getName() {
+    return this.name;
+  }
+
+
   // The scene is the entry point for the description of the scene that
   // is stored in the glTF. It refers to the nodes that define the
   // scene graph.
@@ -348,6 +353,7 @@ export class LogToGLTF {
     const timeStep = this.logObject.timeStep;
     const timeSteps = this.logObject.frames.length;
     this.timeEnd = roundToMultiple((timeSteps - 1) * timeStep, timeStep);
+    this.name = this.logObject.name;
     const timeData = new Float32Array(linspace(0, this.timeEnd, timeSteps));
     const timeByteLength = timeData.length * BYTES_IN_FLOAT;
     const timeURI = float32ArrayToBase64(timeData);

@@ -8,7 +8,8 @@ function timeCB(newTime) {
     app.ports.vis2UiTime.send(newTime);
 }
 
-function readyCB(timeEnd) {
+function readyCB(timeEnd, name) {
+    document.title = `Review: ${name}`;
     app.ports.vis2UiLoaded.send(timeEnd);
 }
 
@@ -63,3 +64,12 @@ app.ports.ui2VisData.subscribe(function (str) {
     visualizer.start();
 });
 
+
+// window.addEventListener("dragover", function (e) {
+//     e = e || event;
+//     e.preventDefault();
+// }, false);
+// window.addEventListener("drop", function (e) {
+//     e = e || event;
+//     e.preventDefault();
+// }, false);
