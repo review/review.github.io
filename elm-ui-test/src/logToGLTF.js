@@ -20,6 +20,50 @@ const DEFAULT_ROUGHNESS = 0.5;
 
 const BYTES_IN_FLOAT = 4;
 
+const SCHEMA = {
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Review Log-File",
+  "description": "A visualization of meshes evolving through time.",
+  "type": "object",
+  "properties": {
+    "name": {
+      "description": "A unique name for this animation.",
+      "type": "string"
+    },
+    "timeStep": {
+      "description": "Time elapsing between frames.",
+      "type": "number",
+      "exclusiveMinimum": 0
+    },
+    "objects": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "description": "A unique identifier for a single object.",
+            "type": "string"
+          },
+          "mesh": {
+            "description": "Specify the object mesh (primitives only for now).",
+            "type": "string",
+            "enum": ["cube", "cylinder", "sphere"]
+          }
+        },
+        "required": ["name", "mesh"]
+      },
+      "minItems": 1
+    },
+    "frames": {
+      "type": "array",
+      "items": {
+        "type": "object",
+      },
+      "minItems": 1
+    }
+  },
+  "required": ["name", "timeStep", "objects", "frames"]
+};
 
 // function arrayEqual(a, b) {
 //   if (a === b) return true;
@@ -75,6 +119,9 @@ export class LogToGLTF {
 
   constructor() {
     this.reset();
+
+    this.ajv = new Ajv();
+    this.validator = this.ajv.compile(SCHEMA);
   }
 
 
@@ -118,8 +165,11 @@ export class LogToGLTF {
   convert(log) {
     this.reset();
 
-    // eslint-disable-next-line
-    // console.log(log);
+    // Validate file with AJV
+    const valid = this.validator(log);
+    if (!valid) {
+      throw new Error(this.ajv.errorsText(this.validator.errors));
+    }
 
     // TODO loop through json objects (e.g., multiple files)
     this.logObject = log;

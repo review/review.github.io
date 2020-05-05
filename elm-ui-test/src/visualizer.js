@@ -210,14 +210,15 @@ export class Visualizer {
 
 
   loadAnimation(log) {
-    // TODO: validate log file here
-    this.objNames = log.objects.map(obj => obj.name);
 
+    // TODO: move this to constructor?
     const converter = new LogToGLTF();
     const gltf = converter.convert(log);
     const timeEnd = converter.getTimeEnd();
 
-    // TODO does this need to be saved?
+    this.objNames = log.objects.map(obj => obj.name);
+
+    // TODO: does this need to be saved?
     this.gltfData = gltf;
 
     this.loader.parse(
@@ -452,12 +453,12 @@ export class Visualizer {
   }
 
 
-  exportGLTF() {
-    console.log(this.scene.getObjectByName(this.objNames[0]));
-    this.exporter.parse(this.scene, (result) => {
-      const text = JSON.stringify(result, null, 2);
-      save(new Blob([text], { type: 'text/plain' }));
-    });
+  downloadGltf() {
+    // TODO: look at the differences below
+    // this.exporter.parse(this.scene, (result) => {
+    //   const text = JSON.stringify(result, null, 2);
+    //   save(new Blob([text], { type: 'text/plain' }));
+    // });
     save(new Blob([JSON.stringify(this.gltfData, null, 2)]));
   }
 }

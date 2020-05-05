@@ -193,6 +193,7 @@ type Msg
     | VisualizationLoaded Float
     | VisualizationTime Float
     | VisualizationCommand String
+    | VisualizationError String
 
 
 
@@ -209,6 +210,7 @@ subscriptions _ =
         [ vis2UiLoaded VisualizationLoaded
         , vis2UiTime VisualizationTime
         , vis2UiCommand VisualizationCommand
+        , vis2UiError VisualizationError
         ]
 
 
@@ -239,6 +241,9 @@ port vis2UiTime : (Float -> msg) -> Sub msg
 
 
 port vis2UiCommand : (String -> msg) -> Sub msg
+
+
+port vis2UiError : (String -> msg) -> Sub msg
 
 
 
@@ -749,7 +754,7 @@ update msg model =
             ( { model | colorful = not model.colorful }, ui2VisCommand <| Encode.string colorfulToggled )
 
         Download ->
-            ( model, ui2VisCommand <| Encode.string "download" )
+            ( model, ui2VisCommand <| Encode.string "downloadGltf" )
 
         UpdateUrlText txt ->
             ( { model | urlText = txt }, Cmd.none )
@@ -792,3 +797,6 @@ update msg model =
 
             else
                 ( model, Cmd.none )
+
+        VisualizationError err ->
+            ( { model | status = Splash, error = err }, Cmd.none )

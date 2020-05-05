@@ -9,8 +9,14 @@ Tasks
 - handle bad json input (send error message)
 - structure button and slider inputs
 - download button
-
-https://raw.githubusercontent.com/review/review.github.io/master/examples/worm-tumble.json
+- profile both version
+- validate urls
+- keyboard input
+- improve schema
+  - frames (object names, t/r/s)
+  - objects (scale, material (color, roughness, metallic), static, translation, rotation)
+- update GLTF abilities
+- multiple files?
 
 ~~~bash
 # Create an optimized JS file to embed in a custom HTML document.

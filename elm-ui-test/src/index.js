@@ -13,13 +13,9 @@ function readyCB(timeEnd) {
 }
 
 function endCB() {
-    // not looping, so reset playing values
-    // time = 0; // i don't like this
     visualizer.enable();
     visualizer.pause();
-    app.ports.vis2UiCommand.send("pause");
-    // this.isPlaying = !this.isPlaying;
-    // this.isPlaying ? this.visualizer.play() : this.visualizer.pause();
+    app.ports.vis2UiCommand.send('pause');
 }
 
 // Search URL parameters as source of data
@@ -44,10 +40,26 @@ app.ports.ui2VisSpeed.subscribe(function (newSpeed) {
 });
 
 app.ports.ui2VisData.subscribe(function (str) {
-    // TODO: validate data (send error)
-    const data = JSON.parse(str);
-    visualizer.reset();
-    visualizer.loadAnimation(data);
+
+    let data;
+    try {
+        data = JSON.parse(str);
+    }
+    catch (error) {
+        app.ports.vis2UiError.send('Could not parse JSON data (see console for more information).');
+        console.error(error.message);
+        return;
+    }
+
+    try {
+        visualizer.reset();
+        visualizer.loadAnimation(data);
+    } catch (error) {
+        app.ports.vis2UiError.send('Could not parse GLTF data (see console for more information).');
+        console.error(error.message);
+        return;
+    }
+
     visualizer.start();
 });
 
