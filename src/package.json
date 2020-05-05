@@ -13,7 +13,7 @@
   "dependencies": {
     "@riophae/vue-treeselect": "0.0.6",
     "normalize.css": "^7.0.0",
-    "npm": "^5.8.0",
+    "npm": "^6.13.4",
     "three": "^0.92.0",
     "vue": "^2.5.16",
     "vue-color": "^2.4.6"
