@@ -91,6 +91,7 @@ git push -u origin master
   - material.isShadowMaterial
   - shared material
 - capabilities
+  - use https://threejs.org/editor/ to add more shapes to URIBuffer.js
   - z-Monster.gltf as example for meshes and binary
     - handle multiple files
   - update GLTF abilities
