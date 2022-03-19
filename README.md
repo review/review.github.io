@@ -67,16 +67,21 @@ Link to all examples found in the examples directory:
 ## Development
 
 ~~~bash
+# Installation: prerequisite: Node+npm
+npm install -g parcel-bundler
+
 # Development
+cd elm
 parcel index.html
 
 # Building for production
+cd elm
 rm -r dist 
-git rm *.js *.map
+git rm ../*.js ../*.map
 parcel build index.html
-mv dist/* .
-git add *.js *.map
-git commit -am "New build and add."
+mv dist/* ../
+git add ../*.js ../*.map
+git commit -am "New build."
 git push -u origin master
 ~~~
 
