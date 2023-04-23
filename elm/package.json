@@ -13,7 +13,7 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
-    "cssnano": "^4.1.10",
+    "cssnano": "^6.0.0",
     "elm-hot": "^1.1.4",
     "node-elm-compiler": "^5.0.6"
   }
